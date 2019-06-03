@@ -1,0 +1,18 @@
+/******************************************************************************
+Name: Siebren Kazemier
+School: Uva
+Student number: 12516597
+Project: Assignment week 6, Creating a linked views
+******************************************************************************/
+body {
+    /* center contents */
+    text-align: center;
+    background-color: #FAF7F7;
+    margin: 0;
+    padding: 16px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    display: inline-block;
+}

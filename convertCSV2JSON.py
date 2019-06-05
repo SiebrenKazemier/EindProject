@@ -6,6 +6,7 @@
 ###############################################################################
 
 import pandas as pd
+import json
 
 
 def main(input_file, output_file):
@@ -44,6 +45,10 @@ def parseData(csv_file):
 
 
 def write_json(csv_file, output_file):
+    for col in csv_file:
+        for line in col:
+            print(line)
+
     json_file = csv_file.to_json(path_or_buf=output_file, orient="records")
     return json_file
 

@@ -5,9 +5,25 @@ Student number: 12516597
 Project: Assignment week 4, Creating a bar graph
 ******************************************************************************/
 window.onload = function() {
-    importData();
-    // importData2();
+    // importData();
+    importData2();
 };
+
+importData2(); {
+    d3.json("geslaagdenEnGezakten.json").then(function(data) {
+        var groupByProvince = d3.nest()
+                                .key(function(d) { return d.Provincie; })
+                                .key(function(d) { return d.Onderwijstype; })
+                                .rollup(function(v) { return d3.sum(v, function(d) { return d.Examenkandidaten; })})
+                                .entries(data)
+
+        roupByProvince = d3._.nest(roupByProvince, ['0', '1'] )
+
+        console.log(groupByProvince)
+        circularPackingGraph(groupByProvince);
+
+    })
+}
 
 
 function importData() {
@@ -119,19 +135,22 @@ function importData() {
 }
 
 function circularPackingGraph(rootNode) {
-    var width = 1500;
-    var height = 1200;
+    var width = window.innerWidth;
+    var height = window.innerHeight;
 
-    var canvas = d3.select("body")
+    // var width = 1500;
+    // var height = 1200;
+
+    var canvas = d3.select(".col-sm-10")
                     .append("svg")
                     .attr("width", width)
-                    .attr("height", height)
+                    .attr("height", height + 50)
                     .append("g")
-                    .attr("transform", "translate(50,50)");
+                    .attr("transform", "translate(0,0)");
 
     // create layout
     var layout = d3.pack()
-                .size([width, height - 50])
+                .size([width, height])
                 .padding(0);
 
 
@@ -154,8 +173,8 @@ function circularPackingGraph(rootNode) {
     // append circle to nodes
     node.append("circle")
         .attr("r", function(d) { return d.r; })
-        .attr("fill", "steelblue")
-        .attr("opacity", 0.25)
+        .attr("fill", "#E98074")
+        .attr("opacity", 0.3)
         .attr("stroke", "#ADADAD")
         .attr("stroke-width", "s2")
 

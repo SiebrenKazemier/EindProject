@@ -37,6 +37,13 @@ def parseData(csv_file):
                              "GEMIDDELD CIJFER CENTRAAL EXAMEN": "GemiddeldeCijferCentraalExamen",
                              "GEMIDDELD CIJFER CIJFERLIJST": "GemiddeldeCijferCijferlijst"}, inplace=True)
 
+    csv_file.GemiddeldeCijferSchoolExamen = csv_file.GemiddeldeCijferSchoolExamen.str.replace(
+        ",", ".")
+    csv_file.GemiddeldeCijferCentraalExamen = csv_file.GemiddeldeCijferCentraalExamen.str.replace(
+        ",", ".")
+    csv_file.GemiddeldeCijferCijferlijst = csv_file.GemiddeldeCijferCijferlijst.str.replace(
+        ",", ".")
+
     # selects the needed columns
     csv_file = csv_file[["Provincie", "Gemeente", "Onderwijstype", "LeerwegVMBO", "VMBOsector", "Instellingsnaam",
                          "Afdeling", "Examenkandidaten", "Geslaagden", "Gezakten", "GemiddeldeCijferSchoolExamen", "GemiddeldeCijferCentraalExamen", "GemiddeldeCijferCijferlijst"]]
@@ -45,9 +52,6 @@ def parseData(csv_file):
 
 
 def write_json(csv_file, output_file):
-    for col in csv_file:
-        for line in col:
-            print(line)
 
     json_file = csv_file.to_json(path_or_buf=output_file, orient="records")
     return json_file

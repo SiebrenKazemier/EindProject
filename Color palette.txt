@@ -1,0 +1,11 @@
+#E27D60			rood
+#85DCB2			lichtblauw
+#E8A87C			oranje
+#C38D9E			donker paarse
+#41B3A3			donker blauw
+#FAC2C1			roze
+#7DC2AF			background
+#37B5FF			blauw
+
+
+

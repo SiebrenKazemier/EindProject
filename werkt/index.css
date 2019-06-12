@@ -4,6 +4,10 @@ School: Uva
 Student number: 12516597
 Project: Assignment week 6, Creating a linked views
 ******************************************************************************/
+.node {
+		cursor: pointer;
+}
+
 .index {
     /* center contents */
     text-align: center;
@@ -15,7 +19,7 @@ Project: Assignment week 6, Creating a linked views
 }
 
 .grafieken {
-    background-color: #EAE7DC;
+    background-color: #7DC2AF;
 }
 
 /* for smaller screans rememove padding top */
@@ -49,11 +53,76 @@ svg {
     margin: 0 auto;
 }
 
+/* ################################# axis barchart########################### */
+.xAxis line{
+  stroke: white;
+}
 
+.xAxis path{
+  stroke: white;
+}
 
+.xAxis text{
+  fill: white;
+}
+.yAxis line{
+  stroke: white;
+}
 
+.yAxis path{
+  stroke: white;
+}
 
+.yAxis text{
+  fill: white;
+}
+
+/* ################################# container ########################### */
+#container-padding {
+	height: 50px;
+}
+
+#graph1 {
+
+	width: 50vw;
+	height: 100vh;
+}
+
+#graph2 {
+	width: 40vw;
+	height: 70vh;
+}
+#graph3 {
+	width: 1000px;
+	height: 1000px;
+}
+
+/* ################################# buttons ########################### */
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
     display: inline-block;
 }
+
+.btn-secondary {
+    background-color: #41B3A3;
+	border-color: #41B3A3;
+}
+.btn-info {
+	background-color: #41B3A3;
+	border-color: #41B3A3;
+}
+
+.active {
+    background-color: #85DCB2 !important;
+	border-color: #85DCB2 !important;
+}
+
+/* .btn-info {
+background-color: hsl(351, 68%, 11%) !important;
+} */
+
+/* ################################# circle style ########################### */
+/* circle:hover {
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+} */

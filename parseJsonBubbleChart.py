@@ -21,9 +21,11 @@ with open("geslaagdenEnGezakten.json") as f:
         for line in data:
             if line["Instellingsnaam"] == name:
                 counter += line["Examenkandidaten"]
+                province = line["Provincie"]
         dictcandidates = {}
         dictcandidates["name"] = name
         dictcandidates["value"] = counter
+        dictcandidates["province"] = province
         list.append(dictcandidates)
 
 with open("bubbleData.json", "w") as f:

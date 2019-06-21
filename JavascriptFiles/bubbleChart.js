@@ -64,7 +64,7 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
          .data(data)
 
        u.enter()
-         .append('circle') //<----------------------------------------------------------
+         .append('circle')
          .attr("class", "bubble")
          .merge(u)
          .attr('cx', function(d) {
@@ -85,8 +85,7 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
 
     // change graph to circleData
     function changeGraph2(circleData, bubbleData, secondBarData) {
-        d3.select("#toCircle")
-        .on("click", function() {
+        d3.select("#toCircle").on("click", function() {
             var graph = this.getAttribute("value");
             var active = this.getAttribute("class");
             var duration = 750;
@@ -102,16 +101,12 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
                 var searchButton = d3.select("#search")
                 searchButton.remove()
 
-                var result = d3.select(".list-group")
-                                .remove()
-
                 // remove all circles
                 var circleRemove = d3.selectAll("circle")
 
                 circleRemove.transition()
                             .duration(duration)
                             .style("opacity", 0)
-                            // .on("end", bubbleCalback)
 
                 // remove text
                 var textLabel = d3.select("#label-path-title-text")
@@ -126,8 +121,6 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
 
                 // create callback function
                 function bubbleCalback() {
-                    // remove circles
-                    var circleRemove = d3.selectAll(".bubble")
                     circleRemove.remove()
 
                     // remove text and path
@@ -147,7 +140,6 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
 
     function sortBubble(data) {
         d3.select("#sortButton").on("click", function() {
-
             var active = this.getAttribute("aria-pressed");
 
             if (active == "false") {
@@ -200,11 +192,12 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
                     // remove text and path
                     var text = d3.select("#graph1")
 
+                    // move text of the screen
                     text.selectAll("#label-path-title-text")
-                        .remove()
-
+                        .attr("transform", "translate(" + (width*3) + "," + (height*3) + ")")
+                    // move text of the screen
                     text.selectAll("#label-path-title")
-                        .remove()
+                        .attr("transform", "translate(" + (width*3) + "," + (height*3) + ")")
                 }
 
 

@@ -10,12 +10,12 @@ window.onload = function() {
 
 // load data
 function importData() {
-    d3.json("updatePieData.json").then(function(data6) {
-        d3.json("groupedBarChart2.json").then(function(data5) {
-            d3.json("circleData.json").then(function(data) {
-                d3.json("bubbleData.json").then(function(data2) {
-                    d3.json("groupedBarChart.json").then(function(data3) {
-                        d3.json("pieChart.json").then(function(data4) {
+    d3.json("/Data/updatePieData.json").then(function(data6) {
+        d3.json("/Data/groupedBarChart2.json").then(function(data5) {
+            d3.json("/Data/circleData.json").then(function(data) {
+                d3.json("/Data/bubbleData.json").then(function(data2) {
+                    d3.json("/Data/groupedBarChart.json").then(function(data3) {
+                        d3.json("/Data/pieChart.json").then(function(data4) {
                             circularPackingGraph(data, data2, true, data5, data6, data4, data3);
                             groupedBarChart(data3, data4);
                             pieChart(data4);

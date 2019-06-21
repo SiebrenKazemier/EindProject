@@ -2,11 +2,6 @@
 //                             circularPackingGraph
 // #############################################################################
 function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, updatePieData, pieData, barData) {
-    // var width = window.innerWidth;
-    // var height = window.innerHeight;
-
-    // var width = 932;                   // < ---------------------------------- zoooommm
-    // var height = width;
     if (TrueCheck == true) {
 
         var selection = d3.select("#graph1")
@@ -19,16 +14,10 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
         var margin = 40;
         var marginBottom = width * 0.08;
 
+        // make a canvas
         var canvas = d3.select("#graph1")
                         .append("svg")
                         .attr("id", "circleSVG")
-                        // .attr("viewBox", `-${width/2} -${height/2} ${width} ${height}`)
-                        // .style("display", "block")
-                        // .style("margin", "0 -14px")
-                        // .style("background", "none")
-                        // .style("cursor", "pointer")
-                        // .on("click", function() {return zoom(nodes) } );    // < ---------------------------------- zoooommm
-
                         .attr("width", width)
                         .attr("height", height + margin)
                         .append("g")
@@ -60,7 +49,7 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
     nodes = layout(nodes);
 
     var node = canvas.selectAll(".node")
-                    .data(nodes.descendants()) // <------------------------------- nodes.descendants().slice(1) removes rootnode
+                    .data(nodes.descendants())
                     .enter()
                     .append("g")
                     .attr("class", "node")
@@ -110,52 +99,50 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
         .attr("stroke", "#41B3A3")
         .attr("stroke-width", "s2")
 
-    //     .attr("pointer-events", d => !d.children ? "none" : null)
-    //     .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()));
+
+    // var svg = d3.select("#circleSVG")
+
+    // create a tooltip
+    // var tooltip = svg.append("g")
+    //                  .attr("class", "tooltip")
+    //                  .style("display", null);
+
+     // // add tooltip form to rect
+     // tooltip.append("rect")
+     //     .attr("width", 60)
+     //     .attr("height", 20)
+     //     .attr("fill", "white")
+     //     .style("opacity", 0.5);
+     //
+     // // add tooltip text
+     // tooltip.append("text")
+     //     .attr("x", 30)
+     //     .attr("dy", "1.2em")
+     //     .style("text-anchor", "middle")
+     //     .attr("font-size", "12px")
+     //     .attr("font-weight", "bold");
 
     // select circles
     var circle = canvas.selectAll("circle")
 
     circle.on("mouseenter", handleMouseEnter)
             .on("mouseout", handleMouseOut)
+            // on mouse enter show tooltip
+      // .on("mouseover", function() {
+      //     tooltip.style("display", null);
+      // })
+      // .on("mouseout", function() {
+      //     tooltip.style("display", null);
+      //   })
+      // .on("mousemove", function(d) {
+      // var xPosition = d3.mouse(this)[0] + 0;
+      // var yPosition = d3.mouse(this)[1] - 0;
+      // console.log(tooltip)
+      //
+      // tooltip.attr("transform", "translate(" + 100 + "," + 100 + ")");
+      // tooltip.select("text").text("haaaaaai");
+      // })
 
-    // circle.on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation())); // <----------- ZOOOOM
-
-
-                            // APPLY zoooom
-// ###########################################################################
-
-    // zoomTo([nodes.x, nodes.y, nodes.r * 2]);
-    //
-    //
-    // function zoomTo(v) {
-    //     const k = width / v[2];
-    //
-    //     view = v;
-    //
-    //     // label.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")" });
-    //     node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")" });
-    //     node.attr("r", function(d) { return d.r * k });
-    // }
-    //
-    // function zoom(d) {
-    //     const focus0 = focus;
-    //
-    //     focus = d;
-    //     console.log(d)
-    //     const transition = canvas.transition()
-    //                     .duration(d3.event.altKey ? 7500 : 750)
-    //                     .tween("zoom", d => {
-    //     const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
-    //     return t => zoomTo(i(t));
-    // });
-    //
-    // label.filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
-    //     .transition(transition)
-    //     .style("fill-opacity", d => d.parent === focus ? 1 : 0)
-    //     .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-    //     .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
-    // }
 
 
                             // APPLY TEXT!!!
@@ -246,30 +233,6 @@ function handleMouseEnter(d, i) {
         .attr("stroke", "white")
         .attr("stroke-width", "3")
         .style("stroke-opacity", 0.6);
-
-    // // select width and height
-    // var selection = d3.select("#circleSVG")
-    //                 .node().getBoundingClientRect()
-    //
-    // var height = selection["height"]
-    // var width = selection["width"]
-    //
-    // // select svg
-    // var svg = d3.select("#graph1")
-    //             .select("svg")
-    //             .select("g")
-    //
-    // // remove old elements
-    // svg.selectAll(".candidates")
-    //     .remove()
-    //
-    // // append text
-    // svg.append("text")
-    //     .attr("class", "candidates")
-    //     .style("fill", "white")
-    //     .style('font-size', '20px')
-    //     .attr("transform", "translate("+ (width - 180) + "," + 80 + ")")
-    //     .text("Kandidaten: " + d.value)
 };
 
 // handles mouse out
@@ -282,10 +245,4 @@ function handleMouseOut(d, i) {
     var svg = d3.select("#graph1")
                 .select("svg")
                 .select("g")
-
-    // svg.selectAll(".candidates")
-    //     .transition().duration(500)
-    //     .style("opacity", 0)
-    //     .remove()
-
 };

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Schoolcijfers: Home</title>
+    <title>Schoolcijfers: Grafieken</title>
 
     <!-- bootstrap css -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,10 +13,17 @@
     <!-- style sheet -->
     <link rel="stylesheet" type="text/css" href="index.css">
 
+    <!-- javascript sheet -->
+    <script type="text/javascript" src="JavascriptFiles/init.js"></script>
+    <script type="text/javascript" src="JavascriptFiles/circularPacking.js"></script>
+    <script type="text/javascript" src="JavascriptFiles/groupedBarChart.js"></script>
+    <script type="text/javascript" src="JavascriptFiles/pieChart.js"></script>
+    <script type="text/javascript" src="JavascriptFiles/bubbleChart.js"></script>
+
 </head>
-    <body class="index">
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light">
-            <a class="navbar-brand text-light d-flex justify-content-center" href="/">Home</a>
+    <body class="grafieken">
+        <nav id="grafieken-nav" class="navbar fixed-top navbar-expand-lg navbar-light">
+            <a class="navbar-brand text-light d-flex justify-content-center" href="index.html">Home</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -28,13 +35,31 @@
                 </div>
             </div>
         </nav>
-
-        <main>
-            <div class="welcome">
-                <p>Mijn naam is Siebren Kazemier</p>
-                <p>en dit is het eindproject van de minor programmeren</p>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm" id="container-padding">
+                </div>
             </div>
-        </main>
+            <div class="row">
+                <div class="col-sm text-center" id="graph1">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label id="toCircle" class="btn btn-info btn-secondary active" value="niveau">
+                            <input type="radio" name="options" autocomplete="off" checked> Niveau's
+                        </label>
+                        <label id="toBubble" class="btn btn-info btn-secondary" value="scholen">
+                            <input value="scholen" type="radio" name="options" autocomplete="off"> Scholen
+                        </label>
+                    </div>
+                    <div class="resultDiv"></div>
+                    <!-- <ul class="list-group" id="result"></ul> -->
+                </div>
+                <div class="col-sm" id="graph2">
+                    <div class="containerGraph2"></div>
+                    <div class="containerGraph3"></div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -104,7 +104,7 @@ function searchBar(secondBarData, updatePieData) {
             var searchField = $('#search').val();
             var expression = new RegExp(searchField, "i");
             var lala;
-            d3.json("bubbleData.json").then(function(data) {
+            d3.json("./Data/bubbleData.json").then(function(data) {
                 $.each(data, function(key, value) {
                     if (value.name.search(expression) != -1 || value.province.search(expression) != -1) {
                         $('#result').append('<li class="list-group-item" value="'+value.name+'"> '+value.name+' | <span class="text-muted"> '+value.province+' </span></li>');

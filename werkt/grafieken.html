@@ -14,7 +14,11 @@
     <link rel="stylesheet" type="text/css" href="index.css">
 
     <!-- javascript sheet -->
+    <script type="text/javascript" src="init.js"></script>
     <script type="text/javascript" src="circularPacking.js"></script>
+    <script type="text/javascript" src="groupedBarChart.js"></script>
+    <script type="text/javascript" src="pieChart.js"></script>
+    <script type="text/javascript" src="bubbleChart.js"></script>
 
 </head>
     <body class="grafieken">
@@ -25,10 +29,9 @@
             </button>
             <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link text-light" href="index.html">Home<span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link text-light" href="/scholen">Scholen</a>
+                    <a class="nav-item nav-link text-light" href="scholen.html">Scholen</a>
                     <a class="nav-item nav-link text-light" href="grafieken.html">Grafieken</a>
-                    <a class="nav-item nav-link text-light" href="/data">Data</a>
+                    <a class="nav-item nav-link text-light" href="data.html">Data</a>
                 </div>
             </div>
         </nav>
@@ -40,20 +43,19 @@
             <div class="row">
                 <div class="col-sm text-center" id="graph1">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-info btn-secondary active" value="niveau">
+                        <label id="toCircle" class="btn btn-info btn-secondary active" value="niveau">
                             <input type="radio" name="options" autocomplete="off" checked> Niveau's
                         </label>
-                        <label class="btn btn-info btn-secondary" value="scholen">
+                        <label id="toBubble" class="btn btn-info btn-secondary" value="scholen">
                             <input value="scholen" type="radio" name="options" autocomplete="off"> Scholen
                         </label>
                     </div>
+                    <div class="resultDiv"></div>
+                    <!-- <ul class="list-group" id="result"></ul> -->
                 </div>
-                <div class="text-left"></div>
                 <div class="col-sm" id="graph2">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm" id="graph3">
+                    <div class="containerGraph2"></div>
+                    <div class="containerGraph3"></div>
                 </div>
             </div>
         </div>

@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Schoolcijfers: Home</title>
+    <title>Schoolcijfers
+        <!-- :{% block title %}{% endblock %} -->
+    </title>
 
     <!-- bootstrap css -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -11,30 +13,40 @@
     <script type="text/javascript" src="d3/d3.js"></script>
 
     <!-- style sheet -->
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="main/css" href="main.css">
+
+    <!-- javascript sheet -->
+    <!-- <script type="text/javascript" src="circularPacking.js"></script> -->
 
 </head>
-    <body class="index">
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light">
-            <a class="navbar-brand text-light d-flex justify-content-center" href="/">Home</a>
+<body class="index">
+    <!-- <div id="index-container" class="container-fluid"> -->
+        <!-- nav bar -->
+        <nav id="index-nav" class="navbar fixed-top navbar-expand-lg navbar-light">
+            <a class="navbar-brand text-light  d-flex justify-content-center" href="#">Home</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link text-light" href="scholen.html">Scholen</a>
+                    <a class="nav-item nav-link text-light" href="#">Home<span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link text-light" href="#">Scholen</a>
                     <a class="nav-item nav-link text-light" href="grafieken.html">Grafieken</a>
-                    <a class="nav-item nav-link text-light" href="data.html">Data</a>
+                    <a class="nav-item nav-link text-light" href="#">Data</a>
                 </div>
             </div>
         </nav>
+    <div class="welcome">
+        <p>Mijn naam is Siebren Kazemier</p>
+        <p>en dit is het eindproject van de minor programmeren</p>
+    </div>
+        <!-- <main class="container-fluid">
+            {% block main %}{% endblock %}
+        </main> -->
 
-        <main>
-            <div class="welcome">
-                <p>Mijn naam is Siebren Kazemier</p>
-                <p>en dit is het eindproject van de minor programmeren</p>
-            </div>
-        </main>
+
+    <!-- </div> -->
+
 
         <!-- Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

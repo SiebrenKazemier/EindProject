@@ -22,6 +22,10 @@ Project: Assignment week 6, Creating a linked views
     background-color: #7DC2AF;
 }
 
+.data {
+	background-color: #7DC2AF;
+}
+
 /* for smaller screans rememove padding top */
 @media (max-width: 979px) {
     body {
@@ -76,6 +80,20 @@ svg {
 .yAxis text{
   fill: white;
 }
+.label {
+	fill: white;
+	font-size: 0.8em;
+}
+
+.cijfer {
+	fill: white;
+}
+.school {
+	fill: white;
+}
+.persentage {
+	fill: white;
+}
 
 /* ################################# container ########################### */
 #container-padding {
@@ -83,25 +101,30 @@ svg {
 }
 
 #graph1 {
-
 	width: 50vw;
-	height: 100vh;
+	height: 140vh;
 }
 
 #graph2 {
-	width: 40vw;
-	height: 70vh;
-}
-#graph3 {
-	width: 1000px;
-	height: 1000px;
+	width: 45vw;
+	height: 150vh;
 }
 
+#graph4 {
+	width: 100vw;
+	height: 100vh;
+}
+
+.containerGraph3 {
+	width: 45vw;
+	height: 70vh;
+}
+.containerGraph2 {
+	width: 45vw;
+	height: 70vh;
+}
 /* ################################# buttons ########################### */
 /* The container <div> - needed to position the dropdown content */
-.dropdown {
-    display: inline-block;
-}
 
 .btn-secondary {
     background-color: #41B3A3;
@@ -116,6 +139,7 @@ svg {
     background-color: #85DCB2 !important;
 	border-color: #85DCB2 !important;
 }
+
 
 /* .btn-info {
 background-color: hsl(351, 68%, 11%) !important;

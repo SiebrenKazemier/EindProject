@@ -39,7 +39,7 @@ with open("geslaagdenEnGezakten.json") as f:
     for line in data:
         passed += line["Geslaagden"]
         failed += line["Gezakten"]
-    pas_fail = {"passed": passed, "failed": failed}
+    pas_fail = {"Geslaagd": passed, "Gezakt": failed}
     # append total to dataDict
     data_dict["values"] = pas_fail
 
@@ -72,16 +72,16 @@ with open("geslaagdenEnGezakten.json") as f:
                                 schooltype_failed += line["Gezakten"]
 
                 if direction_passed > 0 and direction_failed > 0:
-                    direction_pass_fail = {"passed": direction_passed, "failed": direction_failed}
+                    direction_pass_fail = {"Geslaagd": direction_passed, "Gezakt": direction_failed}
                     direction_dict[direction] = direction_pass_fail
 
                 if schooltype_passed > 0 and schooltype_failed > 0:
-                    type_pass_fail = {"passed": schooltype_passed, "failed": schooltype_failed}
+                    type_pass_fail = {"Geslaagd": schooltype_passed, "Gezakt": schooltype_failed}
                     schooldirection_dict[direction] = type_pass_fail
 
             province_dict["test"] = direction_dict
             province_dict[schooltype] = schooldirection_dict
-            province_dict["values"] = {"passed": province_passed, "failed": province_failed}
+            province_dict["values"] = {"Geslaagd": province_passed, "Gezakt": province_failed}
         # add provinces
         data_dict[province] = province_dict
 

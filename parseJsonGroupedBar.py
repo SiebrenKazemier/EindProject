@@ -46,11 +46,13 @@ with open("geslaagdenEnGezakten.json") as f:
                 directGrade1 += float(line["GemiddeldeCijferSchoolExamen"])
                 directGrade2 += float(line["GemiddeldeCijferCentraalExamen"])
                 directGrade3 += float(line["GemiddeldeCijferCijferlijst"])
+                average = (directGrade1 + directGrade2 + directGrade3)/3
         if directCount > 0:
             directGrade1 = round((directGrade1 / directCount), 1)
             directGrade2 = round((directGrade2 / directCount), 1)
             directGrade3 = round((directGrade3 / directCount), 1)
-            directDict[direction] = [directGrade1, directGrade2, directGrade3]
+            average = round((average / directCount), 1)
+            directDict[direction] = [directGrade1, directGrade2, directGrade3, average]
         dataDict["values"] = directDict
 
     # append all provinces
@@ -83,6 +85,7 @@ with open("geslaagdenEnGezakten.json") as f:
                             cijferSchoolExamen += float(line["GemiddeldeCijferSchoolExamen"])
                             cijferCentraalExamen += float(line["GemiddeldeCijferCentraalExamen"])
                             cijferCijferlijst += float(line["GemiddeldeCijferCijferlijst"])
+                            first_average = dataDict["values"][direction][3]
 
                             ####################### SECOND DATA ROW ######################
                             if schooltype == line["Onderwijstype"]:
@@ -93,6 +96,7 @@ with open("geslaagdenEnGezakten.json") as f:
                                     line["GemiddeldeCijferCentraalExamen"])
                                 schoolcijferCijferlijst += float(
                                     line["GemiddeldeCijferCijferlijst"])
+                                average = dataDict["values"][direction][3]
 
                 ####################### FIRST DATA ROW ######################
                 if directionCount > 0:
@@ -100,7 +104,8 @@ with open("geslaagdenEnGezakten.json") as f:
                     cijferSchoolExamen = round((cijferSchoolExamen / directionCount), 1)
                     cijferCentraalExamen = round((cijferCentraalExamen / directionCount), 1)
                     cijferCijferlijst = round((cijferCijferlijst / directionCount), 1)
-                    directionList = [cijferSchoolExamen, cijferCentraalExamen, cijferCijferlijst]
+                    directionList = [cijferSchoolExamen, cijferCentraalExamen,
+                                     cijferCijferlijst, first_average]
                     directionDict[direction] = directionList
 
                     ####################### SECOND DATA ROW ######################
@@ -113,7 +118,7 @@ with open("geslaagdenEnGezakten.json") as f:
                         (schoolcijferCentraalExamen / schooltypeCount), 1)
                     schoolcijferCijferlijst = round((schoolcijferCijferlijst / schooltypeCount), 1)
                     schooldirectionList = [schoolcijferSchoolExamen,
-                                           schoolcijferCentraalExamen, schoolcijferCijferlijst]
+                                           schoolcijferCentraalExamen, schoolcijferCijferlijst, average]
                     schooldirectionDict[direction] = schooldirectionList
 
             provinceDict["values"] = directionDict
@@ -121,7 +126,6 @@ with open("geslaagdenEnGezakten.json") as f:
 
         # add provinces
         dataDict[province] = provinceDict
-    # print(dataDict)
 
 with open("groupedBarChart.json", "w") as f:
     json.dump(dataDict, f)

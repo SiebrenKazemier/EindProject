@@ -15,6 +15,10 @@ function pieChart(data) {
     // format data
     var formatedData = data.values
 
+    // persentages
+    var persentageFailed = ((formatedData.Gezakt / (formatedData.Geslaagd + formatedData.Gezakt)) * 100).toFixed(1);
+    var persentagePassed = ((formatedData.Geslaagd / (formatedData.Geslaagd + formatedData.Gezakt)) * 100).toFixed(1);
+
     // make svg
     const svg = d3.select(".containerGraph3")
                     .append("svg")
@@ -81,10 +85,6 @@ function pieChart(data) {
     var arcGenerator2 = d3.arc()
               .innerRadius(radius + padding)
               .outerRadius(secondRadius)
-
-    // persentages
-    var persentageFailed = ((formatedData.Gezakt / (formatedData.Geslaagd + formatedData.Gezakt)) * 100).toFixed(1);
-    var persentagePassed = ((formatedData.Geslaagd / (formatedData.Geslaagd + formatedData.Gezakt)) * 100).toFixed(1);
 
     // make pie chart
     svg.selectAll('pie2')
@@ -166,58 +166,56 @@ function pieChart(data) {
        .duration(1000)
        .attr("opacity", 1);
 
-
     function handleMouseOverPie() {
-        // remove old elements
-        svg.selectAll(".persentage").remove();
+       // remove old elements
+       svg.selectAll(".persentage").remove();
 
-        // get container width and height
-        var selection = d3.select(".containerGraph3")
-                        .node().getBoundingClientRect()
+       // get container width and height
+       var selection = d3.select(".containerGraph3")
+                       .node().getBoundingClientRect()
 
-        var height = selection["height"]
-        var width = selection["width"]
+       var height = selection["height"]
+       var width = selection["width"]
 
 
-        d3.select(this)
-            .attr("stroke", "white")
-            .style("stroke-width", "3px")
-            .style("stroke-opacity", 0.6)
+       d3.select(this)
+           .attr("stroke", "white")
+           .style("stroke-width", "3px")
+           .style("stroke-opacity", 0.6)
 
-        // append text to the side of the pie
-        svg.append("text")
-        .attr("class", "persentage")
-        .text("Geslaagd: " + persentagePassed + "%")
-        .attr("x", width / 5)
-        .attr("y", -height / 2.3)
-        .transition().duration(200)
-        .attr("opacity", 0.9).attr("opacity", 0.9)
+       // append text to the side of the pie
+       svg.append("text")
+       .attr("class", "persentage")
+       .text("Geslaagd: " + persentagePassed + "%")
+       .attr("x", width / 5)
+       .attr("y", -height / 2.3)
+       .transition().duration(200)
+       .attr("opacity", 0.9).attr("opacity", 0.9)
 
-        // append text
-        svg.append("text")
-        .attr("class", "persentage")
-        .text("Gezakt: " + persentageFailed + "%")
-        .attr("x", width / 5)
-        .attr("y", -height / 2.3+ 30)
-        .transition().duration(200)
-        .attr("opacity", 0.9).attr("opacity", 0.9)
+       // append text
+       svg.append("text")
+       .attr("class", "persentage")
+       .text("Gezakt: " + persentageFailed + "%")
+       .attr("x", width / 5)
+       .attr("y", -height / 2.3+ 30)
+       .transition().duration(200)
+       .attr("opacity", 0.9).attr("opacity", 0.9)
 
-        svg.attr("font-size", 24)
-            .attr("font-family", "Arial")
-            .attr("color", "white")
+       svg.attr("font-size", 24)
+           .attr("font-family", "Arial")
+           .attr("color", "white")
     }
 
 
     function handleMouseOutPie() {
-        d3.select(this)
-            .attr("stroke", "#7DC2AF")
-            .style("stroke-width", "3px")
-            .style("stroke-opacity", 1)
+       d3.select(this)
+           .attr("stroke", "#7DC2AF")
+           .style("stroke-width", "3px")
+           .style("stroke-opacity", 1)
 
-        svg.selectAll(".persentage")
-            .transition().duration(500)
-            .attr("opacity", 0)
-            .remove()
+       svg.selectAll(".persentage")
+           .transition().duration(500)
+           .attr("opacity", 0)
+           .remove()
     }
-
 }

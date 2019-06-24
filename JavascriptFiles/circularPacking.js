@@ -99,28 +99,13 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
         .attr("stroke", "#41B3A3")
         .attr("stroke-width", "s2")
 
-
-    // var svg = d3.select("#circleSVG")
+    // select svg
+    var svg = d3.select("#circleSVG")
 
     // create a tooltip
-    // var tooltip = svg.append("g")
-    //                  .attr("class", "tooltip")
-    //                  .style("display", null);
-
-     // // add tooltip form to rect
-     // tooltip.append("rect")
-     //     .attr("width", 60)
-     //     .attr("height", 20)
-     //     .attr("fill", "white")
-     //     .style("opacity", 0.5);
-     //
-     // // add tooltip text
-     // tooltip.append("text")
-     //     .attr("x", 30)
-     //     .attr("dy", "1.2em")
-     //     .style("text-anchor", "middle")
-     //     .attr("font-size", "12px")
-     //     .attr("font-weight", "bold");
+    var tooltip = svg.append("g")
+                     .attr("id", "tooltip")
+                     .style("display", "none");
 
     // select circles
     var circle = canvas.selectAll("circle")
@@ -128,20 +113,56 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
     circle.on("mouseenter", handleMouseEnter)
             .on("mouseout", handleMouseOut)
             // on mouse enter show tooltip
-      // .on("mouseover", function() {
-      //     tooltip.style("display", null);
-      // })
-      // .on("mouseout", function() {
-      //     tooltip.style("display", null);
-      //   })
-      // .on("mousemove", function(d) {
-      // var xPosition = d3.mouse(this)[0] + 0;
-      // var yPosition = d3.mouse(this)[1] - 0;
-      // console.log(tooltip)
-      //
-      // tooltip.attr("transform", "translate(" + 100 + "," + 100 + ")");
-      // tooltip.select("text").text("haaaaaai");
-      // })
+            .on("mouseover", function(d) {
+                tooltip.style("display", null);
+                tooltip.select("text").text(d.value);
+            })
+
+    // make hover over rootnode
+    canvas.on("mousemove", function(d) {
+        var xPosition = d3.mouse(this)[0] + 10;
+        var yPosition = d3.mouse(this)[1] - 40;
+
+        tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+    })
+
+    // add tooltip form to rect
+    tooltip.append("rect")
+        .attr("width", 60)
+        .attr("height", 20)
+        .attr("fill", "white")
+        .style("opacity", 0.3);
+
+    // add tooltip text
+    tooltip.append("text")
+        .attr("x", 30)
+        .attr("dy", "1.2em")
+        .attr("fill", "white")
+        .style("text-anchor", "middle")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold");
+
+    // create information box
+    var information = svg.append("g")
+                        .attr("id", "info")
+                        .attr("transform", "translate(" + (width - 30) + ",30)")
+
+    // append I
+    information.append("text")
+                .attr("fill", "white")
+                .attr("font-family", "Times New Roman")
+                .attr("font-size", "24px")
+                .text("i")
+
+    // make invis box for a more easy hover effect
+    information.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("opacity", 0)
+                .attr("id", "invisRect")
+                .attr("transform", "translate(-9,-16)")
+                .on("mouseenter", handleMouseEnterInfo)
+                .on("mouseleave", handleMouseLeaveInfo);
 
 
 
@@ -245,4 +266,62 @@ function handleMouseOut(d, i) {
     var svg = d3.select("#graph1")
                 .select("svg")
                 .select("g")
+
+    // remove tooltip
+    var tooltip = d3.select("#tooltip")
+    tooltip.style("display", "none");
+
 };
+
+function handleMouseEnterInfo() {
+    var information = d3.select("#info")
+                        .append("rect")
+                        .attr("width", 75)
+                        .attr("height", 95)
+                        .attr("fill", "white")
+                        .attr("opacity", 0.3)
+                        .attr("transform", "translate(-65,10)")
+                        .attr("class", "infoRect")
+
+    function schoolLevel(color, y, text) {
+        // append rects to info box
+        d3.select("#info").append("rect")
+                    .attr("width", 10)
+                    .attr("height", 10)
+                    .attr("fill", color)
+                    .attr("transform", "translate(-5," + (15 * y) + ")")
+                    .attr("class", "infoRect")
+
+        // append text to info box
+        d3.select("#info").append("text")
+                        .attr("x", -13)
+                        .attr("y", 9 + 15 * y)
+                        .attr("fill", "white")
+                        .style("text-anchor", "end")
+                        .attr("font-size", "10px")
+                        .attr("font-weight", "bold")
+                        .attr("class", "infoText")
+                        .text(text)
+
+    }
+    // make all the boxes
+    schoolLevel("#E27D60", 1, "VWO")
+    schoolLevel("#85DCB2", 2, "HAVO")
+    schoolLevel("#FAC2C1", 3, "VMBO-TL")
+    schoolLevel("#37B5FF", 4, "VMBO-KL")
+    schoolLevel("#C38D9E", 5, "VMBO-BL")
+    schoolLevel("#E8A87C", 6, "VMBO-GL")
+
+}
+
+function handleMouseLeaveInfo() {
+    // remove info box
+    d3.select("#info")
+        .selectAll(".infoRect")
+        .remove()
+
+    d3.select("#info")
+        .selectAll(".infoText")
+        .remove()
+
+}

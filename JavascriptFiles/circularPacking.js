@@ -1,46 +1,47 @@
-// #############################################################################
-//                             circularPackingGraph
-// #############################################################################
+/******************************************************************************
+Name: Siebren Kazemier
+School: Uva
+Student number: 12516597
+Project: Final project
+Context: This is the circular chart class. In this class the circular chart
+         is created.
+******************************************************************************/
+
+// function that creates the chart
 function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, updatePieData, pieData, barData) {
+    // checks if this is the first time the circular chart is built
     if (TrueCheck == true) {
 
-        var selection = d3.select("#graph1")
-                        .node().getBoundingClientRect()
-
-        var height = selection["height"]
-        var width = selection["width"]
+        // get margins from container
+        var margins = getMargins("#graph1")
 
         // get margins from container
         var margin = 40;
-        var marginBottom = width * 0.08;
+        var marginBottom = margins.width * 0.08;
 
         // make a canvas
         var canvas = d3.select("#graph1")
-                        .append("svg")
-                        .attr("id", "circleSVG")
-                        .attr("width", width)
-                        .attr("height", height + margin)
-                        .append("g")
-                        .attr("transform", "translate(0," + (margin - marginBottom) + ")");
+                       .append("svg")
+                       .attr("id", "circleSVG")
+                       .attr("width", margins.width)
+                       .attr("height", margins.height + margin)
+                       .append("g")
+                       .attr("transform", "translate(0," + (margin - marginBottom) + ")");
     }
     else {
-        var selection = d3.select("#circleSVG")
-                        .node().getBoundingClientRect()
+        // get margins from container
+        var margins = getMargins("#circleSVG")
 
-        var height = selection["height"]
-        var width = selection["width"]
-
+        // select canvas
         var canvas = d3.select("#circleSVG")
-                        .select("g")
+                       .select("g")
     }
-
-
     // create layout
     var layout = d3.pack()
-                .size([width, height])
-                .padding(0);
+                   .size([margins.width, margins.height])
+                   .padding(0);
 
-     // assigns the data to a hierarchy using parent-child relationships
+    // assigns the data to a hierarchy using parent-child relationships
     var nodes = d3.hierarchy(rootNode, function(d) {
         return d.children;
     });
@@ -48,15 +49,17 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
     // maps the node data to the pack layout
     nodes = layout(nodes);
 
+    // append g elements to the nodes
     var node = canvas.selectAll(".node")
-                    .data(nodes.descendants())
-                    .enter()
-                    .append("g")
-                    .attr("class", "node")
-                    .attr("transform", function (d) {return "translate(" + d.x + "," + d.y + ")"; });
+                      .data(nodes.descendants())
+                      .enter()
+                      .append("g")
+                      .attr("class", "node")
+                      .attr("transform", function (d) {return "translate(" + d.x + "," + d.y + ")"; });
 
     // append circle to nodes
     node.append("circle")
+        // create different colors school levels
         .attr("fill", function(d) {
             if (d.depth == 2) {
                 if (d.data.name == "VWO") {
@@ -110,13 +113,14 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
     // select circles
     var circle = canvas.selectAll("circle")
 
+    // append mouse events on circles
     circle.on("mouseenter", handleMouseEnter)
-            .on("mouseout", handleMouseOut)
-            // on mouse enter show tooltip
-            .on("mouseover", function(d) {
-                tooltip.style("display", null);
-                tooltip.select("text").text(d.value);
-            })
+          .on("mouseout", handleMouseOut)
+          // on mouse enter show tooltip
+          .on("mouseover", function(d) {
+              tooltip.style("display", null);
+              tooltip.select("text").text(d.value);
+          })
 
     // make hover over rootnode
     canvas.on("mousemove", function(d) {
@@ -126,95 +130,107 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
     })
 
-    // add tooltip form to rect
+    // add a rect as tooltip form
     tooltip.append("rect")
-        .attr("width", 60)
-        .attr("height", 20)
-        .attr("fill", "white")
-        .style("opacity", 0.3);
+           .attr("width", 60)
+           .attr("height", 20)
+           .attr("fill", "white")
+           .style("opacity", 0.3);
 
-    // add tooltip text
+    // add text to the tooltip
     tooltip.append("text")
-        .attr("x", 30)
-        .attr("dy", "1.2em")
-        .attr("fill", "white")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");
+           .attr("x", 30)
+           .attr("dy", "1.2em")
+           .attr("fill", "white")
+           .style("text-anchor", "middle")
+           .attr("font-size", "12px")
+           .attr("font-weight", "bold");
 
-    // create information box
+    // create information box (legend)
     var information = svg.append("g")
-                        .attr("id", "info")
-                        .attr("transform", "translate(" + (width - 30) + ",30)")
+                         .attr("id", "info")
+                         .attr("transform", "translate(" + (margins.width - 30) + ",30)")
 
-    // append I
+    // create stroke for information circle
+    information.append("circle")
+               .attr("r", 14)
+               .attr("transform", "translate(3,-9)")
+               .attr("fill", "#7DC2AF")
+               .attr("stroke", "white")
+               .style("stroke-opacity", 1)
+               .attr("stroke-width", 1)
+
+    // append letter "I"
     information.append("text")
-                .attr("fill", "white")
-                .attr("font-family", "Times New Roman")
-                .attr("font-size", "24px")
-                .text("i")
+               .attr("fill", "white")
+               .attr("font-family", "Times New Roman")
+               .attr("font-size", "24px")
+               .text("i")
 
-    // make invis box for a more easy hover effect
-    information.append("rect")
-                .attr("width", 20)
-                .attr("height", 20)
-                .attr("opacity", 0)
-                .attr("id", "invisRect")
-                .attr("transform", "translate(-9,-16)")
-                .on("mouseenter", handleMouseEnterInfo)
-                .on("mouseleave", handleMouseLeaveInfo);
+    // make invis circle for a better hover effect
+    information.append("circle")
+               .attr("r", 14)
+               .attr("transform", "translate(3,-9)")
+               .attr("opacity", 0)
+               .attr("id", "invisCircle")
+               .on("mouseenter", handleMouseEnterInfo)
+               .on("mouseleave", handleMouseLeaveInfo);
 
-
-
-                            // APPLY TEXT!!!
-// ###########################################################################
-
+    // this function creates a circular arc for text
     function arcSVG(mx0, my0, r, larc, sweep, mx1, my1) {
         return 'M'+mx0+','+my0+' A'+r+','+r+' 0 '+larc+','+sweep+' '+mx1+','+my1;
     }
 
+    // this function appands text to the nodes
     node.each(function(d, i) {
 		var g = d3.select(this);
 
 		var label = d.depth === 0 ? '' : d.depth === 3 ? d.data.value : d.data.name;
-
+        // create straight text
 		if(d.depth == 2) {
 			g.append('text')
-				.style('font-size', d3.min([2 * d.r / label.length, 16]))
-                .attr("text-anchor", "middle")
-				.attr('dy', '0.3em')
-                .style("fill", "white")
-                .transition().duration(700)
-                .attr("opacity", 1)
-				.text(label);
+			 .style('font-size', d3.min([2 * d.r / label.length, 16]))
+             .attr("text-anchor", "middle")
+			 .attr('dy', '0.3em')
+             .style("fill", "white")
+             .transition().duration(700)
+             .attr("opacity", 1)
+             .attr("class", "circleText")
+			 .text(label);
 		}
+        // create circular text
         if(d.depth == 1) {
+            // create radius
 			var r = d.r - 10;
 			g.append('path')
-        .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
-        .attr('id', 'label-path-' + i)
-        .style('fill', 'none')
-        .style('stroke', 'none');
+             .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
+             .attr('id', 'label-path-' + i)
+             .style('fill', 'none')
+             .style('stroke', 'none');
 
-       g.append('text')
-       	.append('textPath')
-        .style('fill', 'white')
-        .attr('xlink:href', '#label-path-' + i)
-        .attr('startOffset', '50%')
-        .style('font-size', '10px')
-        .transition().duration(700)
-        .attr("opacity", 1)
-        .text(d.data.name);
+           // append text to path
+           g.append('text')
+            .attr("class", "circleText")
+           	.append('textPath')
+            .style('fill', 'white')
+            .attr('xlink:href', '#label-path-' + i)
+            .attr('startOffset', '50%')
+            .style('font-size', '10px')
+            .transition().duration(700)
+            .attr("opacity", 1)
+            .text(d.data.name);
 		}
         if(d.depth == 0) {
+            // create radius
     		var r = d.r - 14;
     		g.append('path')
-            .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
-            .attr('id', 'label-path-' + i)
-            .style('fill', 'none')
-            .style('stroke', 'none');
-
+             .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
+             .attr('id', 'label-path-' + i)
+             .style('fill', 'none')
+             .style('stroke', 'none');
+           // append text to path
            g.append('text')
+            .attr("class", "circleText")
            	.append('textPath')
             .attr('xlink:href', '#label-path-' + i)
             .attr('startOffset', '47%')
@@ -224,14 +240,16 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
             .attr("opacity", 1)
             .text(d.data.name);
 
-            r = d.r + 10;
-            g.append('path')
+           // change radius
+           r = d.r + 10;
+           g.append('path')
             .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
             .attr('id', 'label-path-title' + i)
             .style('fill', 'none')
             .style('stroke', 'none');
-
+           // append text to path
            g.append('text')
+            .attr("class", "circleText")
             .append('textPath')
             .attr('xlink:href', '#label-path-title' + i)
             .attr('startOffset', '26%')
@@ -239,28 +257,30 @@ function circularPackingGraph(rootNode, bubbleData, TrueCheck, secondBarData, up
             .style('fill', 'white')
             .transition().duration(700)
             .attr("opacity", 1)
-            .text("Totaal aantal examen kandidaten 2018");
+            .text("Totaal aantal examen kandidaten 2017");
 		}
 
 	});
+    // this function changes the graph to a bubblechart
     changeGraph(rootNode, bubbleData, secondBarData, updatePieData, pieData, barData);
+    // this function updates the bar and pie chart if requested
     updateElements(barData, pieData);
 }
 
 // Create event for mouse over
 function handleMouseEnter(d, i) {
-    // change dot size
+    // adds a stroke
     d3.select(this)
-        .attr("stroke", "white")
-        .attr("stroke-width", "3")
-        .style("stroke-opacity", 0.6);
+      .attr("stroke", "white")
+      .attr("stroke-width", "3")
+      .style("stroke-opacity", 0.6);
 };
 
 // handles mouse out
 function handleMouseOut(d, i) {
-    // change size dots back to normal
+    // hides stroke
     d3.select(this)
-        .attr("stroke-width", 0)
+      .attr("stroke-width", 0)
 
     // select svg
     var svg = d3.select("#graph1")
@@ -273,6 +293,7 @@ function handleMouseOut(d, i) {
 
 };
 
+// create a function for the mouseover of the legend
 function handleMouseEnterInfo() {
     var information = d3.select("#info")
                         .append("rect")
@@ -286,22 +307,22 @@ function handleMouseEnterInfo() {
     function schoolLevel(color, y, text) {
         // append rects to info box
         d3.select("#info").append("rect")
-                    .attr("width", 10)
-                    .attr("height", 10)
-                    .attr("fill", color)
-                    .attr("transform", "translate(-5," + (15 * y) + ")")
-                    .attr("class", "infoRect")
+                          .attr("width", 10)
+                          .attr("height", 10)
+                          .attr("fill", color)
+                          .attr("transform", "translate(-5," + (15 * y) + ")")
+                          .attr("class", "infoRect")
 
         // append text to info box
         d3.select("#info").append("text")
-                        .attr("x", -13)
-                        .attr("y", 9 + 15 * y)
-                        .attr("fill", "white")
-                        .style("text-anchor", "end")
-                        .attr("font-size", "10px")
-                        .attr("font-weight", "bold")
-                        .attr("class", "infoText")
-                        .text(text)
+                          .attr("x", -13)
+                          .attr("y", 9 + 15 * y)
+                          .attr("fill", "white")
+                          .style("text-anchor", "end")
+                          .attr("font-size", "10px")
+                          .attr("font-weight", "bold")
+                          .attr("class", "infoText")
+                          .text(text)
 
     }
     // make all the boxes
@@ -317,11 +338,11 @@ function handleMouseEnterInfo() {
 function handleMouseLeaveInfo() {
     // remove info box
     d3.select("#info")
-        .selectAll(".infoRect")
-        .remove()
+      .selectAll(".infoRect")
+      .remove()
 
     d3.select("#info")
-        .selectAll(".infoText")
-        .remove()
+      .selectAll(".infoText")
+      .remove()
 
 }

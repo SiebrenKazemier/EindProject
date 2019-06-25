@@ -44,17 +44,16 @@ function changeGraph(circleData, bubbleData, secondBarData, updatePieData, pieDa
         // checks if the button is not active
         if (active != "btn btn-info btn-secondary active") {
             var remove = d3.selectAll(".node")
-            var removeCircle = d3.selectAll("circle")
-            var removeText = remove.selectAll("text")
-            var invisRect = d3.select("#invisRect")
+            var removeCircle = d3.selectAll(".circleChart")
+            var removeText = remove.selectAll(".circleText")
+            var invisCircle = d3.select("#invisCircle")
             var counter = 0;
 
             // does callback only 1 time
             function callback() {
                 if (counter == 0) {
                     remove.remove()
-                    removeText.remove()
-                    invisRect.remove()
+                    // removeText.remove()
                     bubblechart(bubbleData, secondBarData, updatePieData, circleData, pieData, barData);
                     counter = counter +1;
 
@@ -63,6 +62,8 @@ function changeGraph(circleData, bubbleData, secondBarData, updatePieData, pieDa
                                     .remove()
                 }
             }
+            // removes legend
+            invisCircle.remove()
 
             // remove all circles
             removeCircle.transition()
@@ -71,13 +72,13 @@ function changeGraph(circleData, bubbleData, secondBarData, updatePieData, pieDa
 
             // remove all text
             removeText.transition()
-                        .duration(duration)
-                        .style("opacity", 0)
-                        .on("end", callback)
+                      .duration(duration)
+                      .style("opacity", 0)
+                      .on("end", callback)
 
             // create button for sorting the bubbleGraph
             var button = d3.select(".btn-group")
-                            .append("button")
+                           .append("button")
 
             // append atribute to the button
             button.text("Sorteren")
@@ -88,7 +89,7 @@ function changeGraph(circleData, bubbleData, secondBarData, updatePieData, pieDa
 
             // create search button
             var searchButton = d3.select(".btn-group")
-                                .append("input")
+                                 .append("input")
 
             // append atributes to the searchbar
             searchButton.attr("placeholder", "Zoek school")
@@ -102,7 +103,7 @@ function changeGraph(circleData, bubbleData, secondBarData, updatePieData, pieDa
 
             // append atributes to searchbar
             result.attr("class", "list-group")
-                    .attr("id", "result")
+                  .attr("id", "result")
 
             // add searchBar
             searchBar(secondBarData, updatePieData);
@@ -137,7 +138,6 @@ function searchBar(secondBarData, updatePieData) {
 function selectSchool(secondBarData, updatePieData) {
     // select all listed schools
     d3.selectAll(".list-group-item").on("click", function(d) {
-        console.log(d)
 
         // get the selected name
         var nameClass = this.getAttribute("value");
@@ -172,7 +172,7 @@ function updateElements2(secondBarData, updatePieData) {
 
         // show selected bubble
         d3.select(this)
-            .attr("opacity", 1) // <--------------------------------------------------------------
+            .attr("opacity", 1)
             .style("fill", "white")
     })
 }
@@ -181,7 +181,8 @@ function updateElements2(secondBarData, updatePieData) {
 function getMargins(graph) {
     // get margins from container
     var selection = d3.select(graph)
-                    .node().getBoundingClientRect()
+                      .node()
+                      .getBoundingClientRect()
 
     var margins = {}
     var height = selection["height"]
@@ -209,7 +210,7 @@ function udatePieAndBar(secondBarData, updatePieData, name, d) {
     // change opacity and reset color to old colorscale
     var bub = d3.selectAll(".bubble")
     bub.attr("opacity", 0.5)
-        .style("fill", function(d) { return color(d.province)})
+       .style("fill", function(d) { return color(d.province)})
 
     // select barchart svg
     var svg = d3.select(".containerGraph2")
@@ -218,49 +219,49 @@ function udatePieAndBar(secondBarData, updatePieData, name, d) {
 
     // change barchart title
     svg.select(".title")
-        .text(name);
+       .text(name);
 
     // remove old title of barGraph
     svg.select(".secondLineTitle")
-        .remove()
+       .remove()
 
     // add second title barGraph
     svg.append("text")
-        .attr("class", "secondLineTitle")
-        .attr("y", 45)
-        .attr("x", 130)
-        .text("Eindexamen cijfers van het:")
-        .attr("font-size", 22)
-        .style("fill", "white")
-        .attr("opacity", 0.9)
+       .attr("class", "secondLineTitle")
+       .attr("y", 45)
+       .attr("x", 130)
+       .text("Eindexamen cijfers van het:")
+       .attr("font-size", 22)
+       .style("fill", "white")
+       .attr("opacity", 0.9)
 
     // select the bubblechart svg
     var svgBubble = d3.select("#graph1")
-                .select("svg")
+                      .select("svg")
 
     // remove old school title from the bubblechart
     svgBubble.selectAll(".school")
-        .remove();
+             .remove();
 
     // append attributes to school title
     svgBubble.append("text")
-       .attr("class", "school")
-       .attr("text-anchor", "middle")
-       .attr("x", margins.width/2)
-       .attr("y", margins.height /15)
-       .attr("font-size", function() {
-           if (name.length > 23) {
-               return margins.width / 16;
-           }
-           else {
-               return margins.width / 12;
-           }
-       })
-       .attr("font-family", "Arial")
-       .transition()
-       .duration(500)
-       .attr("opacity", 0.9)
-       .text(name)
+             .attr("class", "school")
+             .attr("text-anchor", "middle")
+             .attr("x", margins.width/2)
+             .attr("y", margins.height /15)
+             .attr("font-size", function() {
+                 if (name.length > 23) {
+                     return margins.width / 16;
+                 }
+                 else {
+                     return margins.width / 12;
+                 }
+             })
+             .attr("font-family", "Arial")
+             .transition()
+             .duration(500)
+             .attr("opacity", 0.9)
+             .text(name)
 
     // change data for barchart
     var formattedData = reformData2(secondBarData[name])
@@ -354,9 +355,9 @@ function makeBarGraphUpdate(dataChange) {
 
     // Create a scale for x-axis
     var xScale = d3.scaleBand()
-                    .domain(names)
-                    .range([margin.left, margins.width - margin.right])
-                    .paddingInner(padding);
+                   .domain(names)
+                   .range([margin.left, margins.width - margin.right])
+                   .paddingInner(padding);
 
     // Create a second scale for x-axis
     var xScale1 = d3.scaleBand()
@@ -371,57 +372,57 @@ function makeBarGraphUpdate(dataChange) {
 
     // Create x-axis
     const xAxis = d3.axisBottom()
-            .scale(xScale);
+                    .scale(xScale);
 
     // appand atributes to the xAxis
     svg.select(".xAxis")
-        .transition()
-        .duration(duration)
-        .attr('transform', 'translate(0, ' + (margins.height - margin.bottom) + ')')
-        .call(xAxis)
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-45)" );
+       .transition()
+       .duration(duration)
+       .attr('transform', 'translate(0, ' + (margins.height - margin.bottom) + ')')
+       .call(xAxis)
+       .selectAll("text")
+       .style("text-anchor", "end")
+       .attr("dx", "-.8em")
+       .attr("dy", ".15em")
+       .attr("transform", "rotate(-45)" );
 
 
     // update old bars data
     var updateGroup = svg.selectAll(".barGroup")
-                             .data(dataChange);
+                         .data(dataChange);
 
     // appand new g elements
     updateGroup.enter().append("g")
-                    .attr("class", "barGroup")
-                    .merge(updateGroup)
-                    .attr("transform", function(d) { return "translate(" + xScale(d.name) + "," + margin.top + ")"})
+                       .attr("class", "barGroup")
+                       .merge(updateGroup)
+                       .attr("transform", function(d) { return "translate(" + xScale(d.name) + "," + margin.top + ")"})
 
     // function to update the bars
     function updateBarGroup(number, color) {
         // appand new g elements
         var updateGroup = svg.selectAll(".barGroup")
-                                .data(dataChange);
+                             .data(dataChange);
 
         updateGroup.enter().append("g")
                         .merge(updateGroup)
 
         // update data for bargroups
         var uBars = updateGroup.selectAll(".field" + number)
-                            .data(function(d) { return [d] })
+                               .data(function(d) { return [d] })
 
         // append new bars to new bargroups
         uBars.enter().append("rect")
-                        .attr("class", "bar field" + number)
-                        .merge(uBars)
-                        .style("fill", color)
-                        .attr("x", function(d) { return xScale1('field'+ number) })
-                        .transition()
-                        .duration(duration)
-                        .attr("height", d => {
-                            return margins.height - margin.bottom - yScale(d["field" + number])
-                        })
-                        .attr("y", function(d) { return yScale(d["field" + number]) - margin.top})
-                        .attr("width", xScale1.bandwidth());
+                     .attr("class", "bar field" + number)
+                     .merge(uBars)
+                     .style("fill", color)
+                     .attr("x", function(d) { return xScale1('field'+ number) })
+                     .transition()
+                     .duration(duration)
+                     .attr("height", d => {
+                         return margins.height - margin.bottom - yScale(d["field" + number])
+                     })
+                     .attr("y", function(d) { return yScale(d["field" + number]) - margin.top})
+                     .attr("width", xScale1.bandwidth());
 
         // append mouse effects
         updateGroup.selectAll("rect").attr("stroke", "white")
@@ -485,7 +486,7 @@ function updatePie(dataChange) {
     var margins = getMargins(".containerGraph3")
 
     // radius of the piechart
-    var radius = (Math.min(width, height) / 2 - margin)
+    var radius = (Math.min(margins.width, margins.height) / 2 - margin)
 
     // persentages
     var persentageFailed = ((dataChange.Gezakt / (dataChange.Geslaagd + dataChange.Gezakt)) * 100).toFixed(1);
@@ -507,46 +508,46 @@ function updatePie(dataChange) {
 
     // select the pie elements and add the layout
     var updatePie = svg.selectAll('.pathPie2')
-                        .data(layout)
+                       .data(layout)
 
     // build arc for pie
     var arcGenerator2 = d3.arc()
-           .innerRadius(radius + padding)
-           .outerRadius(secondRadius)
+                          .innerRadius(radius + padding)
+                          .outerRadius(secondRadius)
 
     // update pie
     updatePie.enter()
-         .append('path')
-         .merge(updatePie)
-         .transition()
-         .duration(1000)
-         .attr('d', arcGenerator2)
+             .append('path')
+             .merge(updatePie)
+             .transition()
+             .duration(1000)
+             .attr('d', arcGenerator2)
 
     // remove old text
     svg.selectAll(".pieText")
-            .transition()
-            .duration(200)
-            .attr("opacity", 0)
-            .remove()
+       .transition()
+       .duration(200)
+       .attr("opacity", 0)
+       .remove()
 
     // update to new text
     svg.selectAll("pie2")
-        .data(layout)
-        .enter()
-        .append('text')
-        .attr("class", "pieText")
-        .style('fill', 'white')
-        .text(function(d){ return d.data.key})
-        .attr("transform", function(d) { return "translate(" + arcGenerator2.centroid(d) + ")";  })
-        .style("text-anchor", "middle")
-        .style("font-size", 17)
-        .transition()
-        .duration(1000)
-        .attr("opacity", 1)
+       .data(layout)
+       .enter()
+       .append('text')
+       .attr("class", "pieText")
+       .style('fill', 'white')
+       .text(function(d){ return d.data.key})
+       .attr("transform", function(d) { return "translate(" + arcGenerator2.centroid(d) + ")";  })
+       .style("text-anchor", "middle")
+       .style("font-size", 17)
+       .transition()
+       .duration(1000)
+       .attr("opacity", 1)
 
     // append the mouseover funct9ons
     updatePie.on("mouseenter", handleMouseOverPieUpdate)
-            .on("mouseout", handleMouseOutPieUpdate)
+             .on("mouseout", handleMouseOutPieUpdate)
 
     // removes old elements
     updatePie.exit().remove()
@@ -558,42 +559,42 @@ function updatePie(dataChange) {
 
         // select this item
         d3.select(this)
-            .attr("stroke", "white")
-            .style("stroke-width", "3px")
-            .style("stroke-opacity", 0.6)
+          .attr("stroke", "white")
+          .style("stroke-width", "3px")
+          .style("stroke-opacity", 0.6)
 
         // append text to the side of the pie
         svg.append("text")
-        .attr("class", "persentage")
-        .text("Geslaagd: " + persentagePassed + "%")
-        .attr("x", margins.width / 5)
-        .attr("y", -margins.height / 2.3)
-        .transition().duration(200)
-        .attr("opacity", 0.9)
+           .attr("class", "persentage")
+           .text("Geslaagd: " + persentagePassed + "%")
+           .attr("x", margins.width / 5)
+           .attr("y", -margins.height / 2.3)
+           .transition().duration(200)
+           .attr("opacity", 0.9)
 
         // append text
         svg.append("text")
-        .attr("class", "persentage")
-        .text("Gezakt: " + persentageFailed + "%")
-        .attr("x", margins.width / 5)
-        .attr("y", -margins.height / 2.3 + 30)
-        .transition().duration(200)
-        .attr("opacity", 0.9)
+           .attr("class", "persentage")
+           .text("Gezakt: " + persentageFailed + "%")
+           .attr("x", margins.width / 5)
+           .attr("y", -margins.height / 2.3 + 30)
+           .transition().duration(200)
+           .attr("opacity", 0.9)
 
         svg.attr("font-size", 24)
-            .attr("font-family", "Arial")
-            .attr("color", "white")
+           .attr("font-family", "Arial")
+           .attr("color", "white")
     }
 
     function handleMouseOutPieUpdate() {
         d3.select(this)
-            .attr("stroke", "#7DC2AF")
-            .style("stroke-width", "3px")
-            .style("stroke-opacity", 1)
+          .attr("stroke", "#7DC2AF")
+          .style("stroke-width", "3px")
+          .style("stroke-opacity", 1)
 
         svg.selectAll(".persentage")
-            .transition().duration(500)
-            .attr("opacity", 0)
-            .remove()
+           .transition().duration(500)
+           .attr("opacity", 0)
+           .remove()
     }
 }

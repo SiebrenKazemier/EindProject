@@ -4,17 +4,15 @@ School: Uva
 Student number: 12516597
 Project: Final project
 Context: This is the bubble chart class. In this class the bubble chart
-         graph is created. 
+         is created.
 ******************************************************************************/
 
+// function that creates the chart
 function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, barData) {
     // get margins from container
-    var selection = d3.select("#graph1")
-                    .node().getBoundingClientRect()
+    var margins = getMargins("#graph1")
 
-    var height = selection["height"]
-    var width = selection["width"]
-
+    // select the svg from the bubbleChart
     var bubbleSVG = d3.select("svg")
 
     // set the color scale
@@ -24,50 +22,52 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
 
     // Initialize the circle: all located at the center of the svg area
     var bubbleNode = bubbleSVG.select("g")
-      .selectAll("circle")
-      .data(data)
-      .enter()
-      .append("circle")
-        .attr("class", "bubble")
-        .attr("id", function(d) {
-            var name = d.name
-            name = name.replace(',', '');
-            name = name.replace(/\s/g, '_');
-            return name })
-        .style("fill", function(d) { return color(d.province)})
-        .attr("cx", width / 2)
-        .attr("cy", height / 2)
+                              .selectAll("circle")
+                              .data(data)
+                              .enter()
+                              .append("circle")
+                              .attr("class", "bubble")
+                              .attr("id", function(d) {
+                                    var name = d.name
+                                    name = name.replace(',', '');
+                                    name = name.replace(/\s/g, '_');
+                                    return name })
+                              .style("fill", function(d) { return color(d.province)})
+                              .attr("cx", margins.width / 2)
+                              .attr("cy", margins.height / 2)
 
+    // transition for the bubbles when created
     bubbleNode.transition()
-        .duration(750)
-        .attr("r", function(d) { return d.value / (width / 14) })
+              .duration(750)
+              .attr("r", function(d) { return d.value / (margins.width / 14) })
 
     // create a tooltip
     var tooltip = bubbleSVG.append("g")
-                     .attr("id", "tooltip")
-                     .style("display", "none");
+                           .attr("id", "tooltip")
+                           .style("display", "none");
 
+    // append interaction to the bubbles
     bubbleNode.call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended))
-            .on("mouseenter", handleMouseEnterBubble)
-            .on("mouseout", handleMouseOutBubble)
-            .on("mouseover", function(d) {
-                tooltip.style("display", null);
-                // append text
-                tooltip.select("#tooltipText1").text(d.name);
-                tooltip.select("#tooltipText2").text(d.value + " kandidaten");
-                // changes width of rect
-                tooltip.select("rect")
-                        .attr("width", function () {
-                            // check if name kandidates is longer
-                            if (d.name.length < 14) {
-                                return (30 + 14 * 6);
-                            }
-                            else {
-                                return (30 + d.name.length * 6);
-                            }
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended))
+              .on("mouseenter", handleMouseEnterBubble)
+              .on("mouseout", handleMouseOutBubble)
+              .on("mouseover", function(d) {
+                  tooltip.style("display", null);
+                  // append text
+                  tooltip.select("#tooltipText1").text(d.name);
+                  tooltip.select("#tooltipText2").text(d.value + " kandidaten");
+                  // changes width of rect
+                  tooltip.select("rect")
+                         .attr("width", function () {
+                              // check if name "kandidaten" is longer
+                              if (d.name.length < 14) {
+                                  return (30 + 14 * 6);
+                              }
+                              else {
+                                  return (30 + d.name.length * 6);
+                              }
                         })
             })
             .on("mousemove", function(d) {
@@ -75,119 +75,127 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
                 var yPosition = d3.mouse(this)[1] - 60;
 
                 // change position corresponding to the possition of the mouse cursor
-                if (xPosition > width - (width/4)) {
+                if (xPosition > margins.width - (margins.width/4)) {
                     xPosition = xPosition - 50 - d.name.length * 6;
                 }
                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
             });
 
 
-    // add tooltip form to rect
+    // add tooltip form as rect
     tooltip.append("rect")
-        .attr("height", 36)
-        .attr("fill", "white")
-        .style("opacity", 0.3);
+           .attr("height", 36)
+           .attr("fill", "white")
+           .style("opacity", 0.3);
 
-    // add tooltip text
+    // add tooltip text for school names
     tooltip.append("text")
-        .attr("id", "tooltipText1")
-        .attr("x", 10)
-        .attr("dy", "1.2em")
-        .attr("fill", "white")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");
+           .attr("id", "tooltipText1")
+           .attr("x", 10)
+           .attr("dy", "1.2em")
+           .attr("fill", "white")
+           .attr("font-size", "12px")
+           .attr("font-weight", "bold");
 
-    // add tooltip text
+    // add tooltip text for amount
     tooltip.append("text")
-        .attr("id", "tooltipText2")
-        .attr("x", 10)
-        .attr("dy", "2.6em")
-        .attr("fill", "white")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");
+           .attr("id", "tooltipText2")
+           .attr("x", 10)
+           .attr("dy", "2.6em")
+           .attr("fill", "white")
+           .attr("font-size", "12px")
+           .attr("font-weight", "bold");
 
+    // select information
     var information = d3.select("#info")
 
-    // make invis box for a more easy hover effect
-    information.append("rect")
-                .attr("width", 20)
-                .attr("height", 20)
-                .attr("opacity", 0)
-                .attr("id", "invisRect")
-                .attr("transform", "translate(-9,-16)")
-                .on("mouseenter", handleMouseEnterInfo2)
-                .on("mouseleave", handleMouseLeaveInfo);
+    // make invis circle for a better hover effect
+    information.append("circle")
+               .attr("r", 14)
+               .attr("transform", "translate(3,-9)")
+               .attr("opacity", 0)
+               .attr("id", "invisCircle")
+               .on("mouseenter", handleMouseEnterInfo2)
+               .on("mouseleave", handleMouseLeaveInfo);
 
+    // make a scale for the sort of the bubbles
     var ordinalScale = d3.scaleOrdinal()
         .domain(function(d) { return d.province})
-        .range([(1/12 * width), (2/12 * width), (3/13 * width), (4/13 * width),
-        (5/13 * width), (6/13 * width), (7/13 * width), (8/13 * width),
-        (9/13 * width), (10/13 * width), (11/13 * width) , (12/13 * width)]);
+        .range([(1/12 * margins.width), (2/12 * margins.width),
+        (3/13 * margins.width), (4/13 * margins.width), (5/13 * margins.width),
+        (6/13 * margins.width), (7/13 * margins.width), (8/13 * margins.width),
+        (9/13 * margins.width), (10/13 * margins.width),
+        (11/13 * margins.width) , (12/13 * margins.width)]);
 
+    // create a simulation for the bubbles
     var simulation = d3.forceSimulation(data)
-      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('center', d3.forceCenter(margins.width / 2, margins.height / 2))
       .force('collision', d3.forceCollide().radius(function(d) {
-        return d.value / (width / 14);
+        return d.value / (margins.width / 14);
     }))
       .on('tick', ticked);
 
+    // create a movement function for bubbles
     function ticked() {
        var u = d3.select('#graph1')
-         .selectAll('circle')
-         .data(data)
+                 .selectAll('.bubble')
+                 .data(data)
 
        u.enter()
-         .append('circle')
-         .attr("class", "bubble")
-         .merge(u)
-         .attr('cx', function(d) {
+        .append('circle')
+        .attr("class", "bubble")
+        .merge(u)
+        .attr('cx', function(d) {
            return d.x
-         })
-         .attr('cy', function(d) {
+        })
+        .attr('cy', function(d) {
            return d.y
-         })
+        })
 
        u.exit().remove()
      }
 
-    // sort graph
+    // sort the bubble chart
     sortBubble(data)
     // update groupedBarChart
     updateElements2(secondBarData, updatePieData);
-    // change graph
+    // change bubble chart to circular chart
     changeGraph2(circleData, data, secondBarData)
 
-    // change graph to circleData
+    // change bubble chart to circle chart
     function changeGraph2(circleData, bubbleData, secondBarData) {
         d3.select("#toCircle").on("click", function() {
             var graph = this.getAttribute("value");
             var active = this.getAttribute("class");
             var duration = 750;
 
+            // check if button is pressed
             if (active != "btn btn-info btn-secondary active") {
                 // stop simulation
                 simulation.stop();
 
-                // remove button
+                // remove sort button
                 var button = d3.select("#sortButton")
                 button.remove()
 
+                // remove search button
                 var searchButton = d3.select("#search")
                 searchButton.remove()
 
-                // remove all circles
-                var circleRemove = d3.selectAll("circle")
+                // select all circles
+                var circleRemove = d3.selectAll(".bubble")
 
+                // transition for all removing
                 circleRemove.transition()
                             .duration(duration)
                             .style("opacity", 0)
 
-                // remove text
+                // remove text with callback function
                 var textLabel = d3.select("#label-path-title-text")
-                                    .transition()
-                                    .duration(duration)
-                                    .style("opacity", 0)
-                                    .on("end", bubbleCalback)
+                                  .transition()
+                                  .duration(duration)
+                                  .style("opacity", 0)
+                                  .on("end", bubbleCalback)
 
                 // remove second title from bargraph
                 var secondTitle = d3.select(".secondLineTitle")
@@ -195,6 +203,7 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
 
                 // create callback function
                 function bubbleCalback() {
+                    // remove all circles
                     circleRemove.remove()
 
                     // remove text and path
@@ -210,36 +219,37 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
                     text.select("#tooltip")
                         .remove()
 
-                    // remove information
+                    // remove information legend
                     text.select("#info")
                         .remove()
 
+                    // create circular graph
                     circularPackingGraph(circleData, bubbleData, false, secondBarData, updatePieData, pieData, barData);
                 }
             }
         })
     }
 
+    // function to sort the bubbles from the bubble graph
     function sortBubble(data) {
         d3.select("#sortButton").on("click", function() {
-            var active = this.getAttribute("aria-pressed");
-
             // stop old simulation
             simulation.stop()
 
-
-            // make new simulation
+            // make new simulation for sorting
             var simulation2 = d3.forceSimulation(data)
-              .force('center', d3.forceCenter(width / 2, height / 2))
+              .force('center', d3.forceCenter(margins.width / 2, margins.height / 2))
               .force('collision', d3.forceCollide().radius(function(d) {
-                return d.value / (width / 14);
+                return d.value / (margins.width / 14);
             }))
               .on('tick', ticked)
               .force('x', d3.forceX().strength(0.2).x(function(d) {
                           return ordinalScale(d.province);
             }));
 
+            // select bubblechart svg
             var svg = d3.select("#graph1").select("svg")
+
             // make list of provinces
             var provinceList = [];
             for (var line of data) {
@@ -247,15 +257,16 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
                      provinceList.push(line.province)
                 }
             }
-            // get the right format
+
+            // change list to the right format
             provinceList.unshift(provinceList[11])
             provinceList.pop()
 
-            // make province labels
+            // create function for province labels
             function appendText(x, province) {
                 svg.append("text")
                     .attr("class", "provinceLabels")
-                    .attr("transform", "translate (" + x + "," + (height)+ ") rotate(-90)")
+                    .attr("transform", "translate (" + x + "," + (margins.height)+ ") rotate(-90)")
                     .attr("font-family", "Arial")
                     .style('font-size', 28)
                     .style("fill", "white")
@@ -263,17 +274,18 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
                     .text(province);
 
             }
+            // create the labels
             var counter = 80
             for (items of provinceList) {
                 appendText(counter, items);
-                counter += (width/(provinceList.length + 1));
+                counter += (margins.width/(provinceList.length + 1));
             }
 
-            // hide text
+            // slowly hide title text
             bubbleSVG.select("#label-path-title-text")
-                        .transition().duration(2000)
-                        .attr("opacity", 0)
-                        .on("end", textCalback)
+                     .transition().duration(2000)
+                     .attr("opacity", 0)
+                     .on("end", textCalback)
 
             // create callback function
             function textCalback() {
@@ -286,64 +298,55 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
 
                 // move text of the screen
                 text.selectAll("#label-path-title-text")
-                    .attr("transform", "translate(" + (width*3) + "," + (height*3) + ")")
+                    .attr("transform", "translate(" + (margins.width*3) + "," + (margins.height*3) + ")")
                 // move text of the screen
                 text.selectAll("#label-path-title")
-                    .attr("transform", "translate(" + (width*3) + "," + (height*3) + ")")
+                    .attr("transform", "translate(" + (margins.width*3) + "," + (margins.height*3) + ")")
             }
-
-
-
         })
     }
 
-     function dragstarted(d) {
+    // create function for dragging the circles
+    function dragstarted(d) {
         if (!d3.event.active) simulation.alphaTarget(.03).restart();
         d.fx = d.x;
         d.fy = d.y;
     }
-
+    // create function for moving the dragged objects
     function dragged(d) {
         d.fx = d3.event.x;
         d.fy = d3.event.y;
     }
-
+    // finish the drag simulation
     function dragended(d) {
         if (!d3.event.active) simulation.alphaTarget(.03);
         d.fx = null;
         d.fy = null;
     }
 
-    function types(d){
-        d.gdp = +d.gdp;
-        d.size = +d.gdp / sizeDivisor;
-        d.size < 3 ? d.radius = 3 : d.radius = d.size;
-        return d;
-    }
-
-    // append text to bubblechart
+    // this function creates a circular arc for text
     function arcSVG(mx0, my0, r, larc, sweep, mx1, my1) {
         return 'M'+mx0+','+my0+' A'+r+','+r+' 0 '+larc+','+sweep+' '+mx1+','+my1;
     }
 
-    // select g element
+    // select g element from bubble chart
     var g = d3.select("#graph1")
-                .select("svg")
-                .select("g")
+              .select("svg")
+              .select("g")
 
-    // get radius
-    var r = width/2.2;
+    // get radiuscreate a radius
+    var r = margins.width/2.2;
 
-    // create path
+    // append a path for the title of the graph
     g.append('path')
-    .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")")
-    .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
-    .attr('id', 'label-path-title')
-    .attr("class", "titleLabel")
-    .style('fill', 'none')
-    .style('stroke', 'none');
+     .attr("transform", "translate(" + (margins.width/2) + "," + (margins.height/2) + ")")
+     .attr('d', arcSVG(-r, 0, r, 1, 1, r, 0))
+     .attr('id', 'label-path-title')
+     .attr("class", "titleLabel")
+     .style('fill', 'none')
+     .style('stroke', 'none');
 
-    // append text to path
+    // append text to the title path
     g.append('text')
      .append('textPath')
      .attr("id", "label-path-title-text")
@@ -352,30 +355,28 @@ function bubblechart(data, secondBarData, updatePieData, circleData,  pieData, b
      .attr('startOffset', '25%')
      .style('font-size', '30px')
      .style('fill', 'white')
-     .text("Totaal aantal examen kandidaten 2018")
+     .text("Totaal aantal examen kandidaten 2017")
      .transition()
      .duration(1000)
      .attr("opacity", 1);
-
 }
 
-// Create event for mouse over
+// Create mouse over event
 function handleMouseEnterBubble(d, i) {
-    // change stroke
+    // change stroke of the cicles
     d3.select(this)
-        .attr("stroke", "white")
-        .attr("stroke-width", 2)
-        .attr("stroke-opacity", 0.6);
+      .attr("stroke", "white")
+      .attr("stroke-width", 2)
+      .attr("stroke-opacity", 0.6);
 
 };
 // handles mouse out
 function handleMouseOutBubble(d, i) {
     // change size dots back to normal
     d3.select(this)
-        // .attr("stroke", "#41B3A3")
-        .attr("stroke-opacity", 0);
+      .attr("stroke-opacity", 0);
 
-    // removes text slowly
+    // select the svg of the bubble chart
     var svg = d3.select("#graph1")
                 .select("svg");
 
@@ -384,7 +385,9 @@ function handleMouseOutBubble(d, i) {
     tooltip.style("display", "none");
 };
 
+// create a function for the mouseover of the legend
 function handleMouseEnterInfo2() {
+    // create a white box for the info
     var information = d3.select("#info")
                         .append("rect")
                         .attr("width", 105)
@@ -397,23 +400,22 @@ function handleMouseEnterInfo2() {
     function schoolLevel(color, y, text) {
         // append rects to info box
         d3.select("#info").append("rect")
-                    .attr("width", 10)
-                    .attr("height", 10)
-                    .attr("fill", color)
-                    .attr("transform", "translate(-5," + (15 * y) + ")")
-                    .attr("class", "infoRect")
+                          .attr("width", 10)
+                          .attr("height", 10)
+                          .attr("fill", color)
+                          .attr("transform", "translate(-5," + (15 * y) + ")")
+                          .attr("class", "infoRect")
 
         // append text to info box
         d3.select("#info").append("text")
-                        .attr("x", -13)
-                        .attr("y", 9 + 15 * y)
-                        .attr("fill", "white")
-                        .style("text-anchor", "end")
-                        .attr("font-size", "10px")
-                        .attr("font-weight", "bold")
-                        .attr("class", "infoText")
-                        .text(text)
-
+                          .attr("x", -13)
+                          .attr("y", 9 + 15 * y)
+                          .attr("fill", "white")
+                          .style("text-anchor", "end")
+                          .attr("font-size", "10px")
+                          .attr("font-weight", "bold")
+                          .attr("class", "infoText")
+                          .text(text)
     }
     // make all the boxes
     schoolLevel("#E27D60", 1, "Limburg")

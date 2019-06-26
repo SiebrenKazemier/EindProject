@@ -1,3 +1,11 @@
+###############################################################################
+# Name: Siebren Kazemier
+# School: Uva
+# Student number: 12516597
+# Project: Final project
+# Context: Changes json to right format for circle chart.
+###############################################################################
+
 import json
 
 with open("geslaagdenEnGezakten.json") as f:
@@ -35,7 +43,6 @@ with open("geslaagdenEnGezakten.json") as f:
         return dict
 
     # make second child (education type)
-
     def add_children2(schooltype, province):
         counter = 0
         dict = {}
@@ -62,31 +69,6 @@ with open("geslaagdenEnGezakten.json") as f:
         child_list.append(child)
     circle_data["children"] = child_list
 
-    # # third level childs
-    # list = []
-    # for name in school_list:
-    #     for levels in schooltype_list:
-    #         thirdCounter = 0
-    #         for line in data:
-    #             if line["Instellingsnaam"] == name and line["Onderwijstype"] == levels:
-    #                 thirdCounter += line["Examenkandidaten"]
-    #                 provinces = line["Provincie"]
-    #         if thirdCounter > 0:
-    #             last_child = {"name": name, "value": thirdCounter, "level": levels}
-    #             list.append(last_child)
-    #
-    # # add third level childs
-    # for item in circle_data["children"]:
-    #     for level in item["children"]:
-    #         lastList = []
-    #         for line in list:
-    #             if line["level"] == level["name"]:
-    #                 lastDict = {}
-    #                 lastDict["name"] = line["name"]
-    #                 lastDict["value"] = line["value"]
-    #                 # print(lastDict)
-    #                 lastList.append(lastDict)
-    #         level["children"] = lastList
 
 with open("circleData.json", "w") as f:
     json.dump(circle_data, f)

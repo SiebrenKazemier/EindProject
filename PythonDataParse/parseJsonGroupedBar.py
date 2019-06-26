@@ -1,3 +1,11 @@
+###############################################################################
+# Name: Siebren Kazemier
+# School: Uva
+# Student number: 12516597
+# Project: Final project
+# Context: Changes json to right format for grouped bar chart.
+###############################################################################
+
 import json
 
 with open("geslaagdenEnGezakten.json") as f:
@@ -108,10 +116,9 @@ with open("geslaagdenEnGezakten.json") as f:
                                      cijferCijferlijst, first_average]
                     directionDict[direction] = directionList
 
-                    ####################### SECOND DATA ROW ######################
+                ####################### SECOND DATA ROW ######################
                 if schooltypeCount > 0:
                     # add directions
-
                     schoolcijferSchoolExamen = round(
                         (schoolcijferSchoolExamen / schooltypeCount), 1)
                     schoolcijferCentraalExamen = round(

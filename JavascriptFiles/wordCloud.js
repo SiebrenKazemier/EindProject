@@ -4,16 +4,19 @@ School: Uva
 Student number: 12516597
 Project: Final project
 ******************************************************************************/
+// when the page is opend it loads the site
 window.onload = function() {
     importData();
 }
 
+// this function imports the right data
 function importData() {
-    d3.json("bubbleData.json").then(function(data) {
+    d3.json("./Data/bubbleData.json").then(function(data) {
         wordCloud(data);
     })
 }
 
+// this function creates the wordCloud
 function wordCloud(data) {
     // set the color scale
     var color = d3.scaleOrdinal()
@@ -33,7 +36,6 @@ function wordCloud(data) {
         }
         dict["province"] = line.province
         wordList.push(dict)
-        // console.log(dict)
     }
 
     // get margins from container

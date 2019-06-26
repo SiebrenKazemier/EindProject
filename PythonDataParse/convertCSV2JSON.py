@@ -1,8 +1,9 @@
 ###############################################################################
 # Name: Siebren Kazemier
-# Student number: 12516597
 # School: Uva
-# Project: Assignment week 4, Converting CSV file to JSON
+# Student number: 12516597
+# Project: Final project
+# Context: This program changes the csv file to a json file
 ###############################################################################
 
 import pandas as pd
@@ -49,6 +50,8 @@ def parseData(csv_file):
                          "Afdeling", "Examenkandidaten", "Geslaagden", "Gezakten", "GemiddeldeCijferSchoolExamen", "GemiddeldeCijferCentraalExamen", "GemiddeldeCijferCijferlijst"]]
 
     return csv_file
+
+# writes to json
 
 
 def write_json(csv_file, output_file):

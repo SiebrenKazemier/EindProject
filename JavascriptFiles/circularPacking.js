@@ -344,5 +344,4 @@ function handleMouseLeaveInfo() {
     d3.select("#info")
       .selectAll(".infoText")
       .remove()
-
 }

@@ -1,3 +1,11 @@
+###############################################################################
+# Name: Siebren Kazemier
+# School: Uva
+# Student number: 12516597
+# Project: Final project
+# Context: Changes json to right format for pie chart.
+###############################################################################
+
 import json
 
 with open("geslaagdenEnGezakten.json") as f:
